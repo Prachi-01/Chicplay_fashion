@@ -1,0 +1,117 @@
+[
+  {
+    "_id": "698326b8bcc3fda13719bbda",
+    "name": "Cherry Ruched Square Neck Ruffle High-Low Midi Dress",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770202806/chicplay/products/dresses/cherry-ruched-square-neck-ruffle-high-low-midi-dress/main/front/aflgbpb9gastwveemdgs.webp"
+    ],
+    "category": "dresses",
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "_id": "69832d95a161e460f33bffe2",
+    "name": "Floral tiered corset gown with sheer ruffles with detachable skirt",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770204563/chicplay/products/dresses/floral-tiered-corset-gown-with-sheer-ruffles-with-detachable-skirt/main/front/qlfkxdbyhvlyfstsofsc.webp"
+    ],
+    "category": "dresses",
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "_id": "6984366c698e154692a729bb",
+    "name": "Velvet Asymmetrical Neck Bowknot Mini Dress in Maroon",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770272363/chicplay/products/mini%20dress/velvet-asymmetrical-neck-bowknot-mini-dress-in-maroon/main/front/sxw5pyzrr0pwdhcyfjut.webp"
+    ],
+    "category": "mini dress",
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "_id": "69843d145a2e8692bd676ebb",
+    "name": "Square Neck Sleeveless Sundress Midi Dress in Herbal",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770274067/chicplay/products/dresses/square-neck-sleeveless-sundress-midi-dress-in-herbal/main/front/avvknuvgx4zbq3a3hcts.webp"
+    ],
+    "category": "dresses",
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "_id": "6989816f3c15a212ed91d590",
+    "name": "Ribbed Long Sleeve Flared Hem Statement",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770619242/chicplay/products/tops/ribbed-long-sleeve-flared-hem-statement/main/front/jnnkwxabpv95haooddfs.webp"
+    ],
+    "category": "tops",
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "status": "pending",
+    "_id": "6989a47756ac4043ee227b0c",
+    "name": "Blue ribbed top",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770628209/chicplay/products/tops/unnamed-product/default-color/other/uw7iiz3qdohhsqnneym1.webp"
+    ],
+    "category": "tops",
+    "vendorId": 2,
+    "isExclusive": false,
+    "isPublished": true
+  },
+  {
+    "_id": "6989b5d3d8ec40584ac05ae8",
+    "name": "Womens Solid Drawstring Full Sleeve Hoodie ",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770632653/chicplay/products/tops/womens-solid-drawstring-full-sleeve-hoodie/main/front/jd9801hfhdbljpcim8e8.webp"
+    ],
+    "category": "tops",
+    "vendorId": 2,
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "approved"
+  },
+  {
+    "_id": "6989b945e5d32309d1494c71",
+    "name": "Corset Straps Sleeveless Lace-up Tank Tops",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770633522/chicplay/products/dresses/corset-straps-sleeveless-lace-up-tank-tops/main/front/sae1r95nwrjtep6xwi9q.webp"
+    ],
+    "category": "dresses",
+    "vendorId": 2,
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "rejected"
+  },
+  {
+    "_id": "6989c34c3034d28383288b41",
+    "name": "Pants",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770636103/chicplay/products/bottoms/pants/main/front/gomytjb3wjrwimeun0s1.webp"
+    ],
+    "category": "bottoms",
+    "vendorId": 2,
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "pending"
+  },
+  {
+    "_id": "698acf2655f62030bf4e1704",
+    "name": "Burgandy Colour Bodycon",
+    "images": [
+      "https://res.cloudinary.com/dtwc1mnac/image/upload/v1770704678/chicplay/products/dresses/burgandy-colour-bodycon/main/front/hs9btwyot9jjijwrigdv.webp"
+    ],
+    "category": "dresses",
+    "vendorId": 2,
+    "isExclusive": false,
+    "isPublished": true,
+    "status": "pending"
+  }
+]

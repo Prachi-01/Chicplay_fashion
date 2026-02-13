@@ -1,0 +1,14 @@
+/* Improved Grid Responsiveness */
+@media (max-width: 640px) {
+    .dresses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem 5%;
+    }
+}
+
+@media (min-width: 1536px) {
+    .dresses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}

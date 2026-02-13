@@ -1,0 +1,101 @@
+/* Product Detail Page Styles */
+
+.product-image-container {
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-image-container img {
+    will-change: transform, opacity;
+}
+
+/* Custom Scrollbar for Right Pane */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(219, 112, 147, 0.3);
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(219, 112, 147, 0.5);
+}
+
+/* FireFox */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(219, 112, 147, 0.2) transparent;
+}
+
+/* Glassmorphism effects */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(219, 112, 147, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+/* Smooth scrolling for thumbnail gallery */
+.thumbnail-gallery {
+    scrollbar-width: none;
+    /* Hide scrollbar but allow scrolling */
+}
+
+.thumbnail-gallery::-webkit-scrollbar {
+    display: none;
+}
+
+/* Size button animations */
+.size-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1024px) {
+    .h-screen {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .overflow-hidden {
+        overflow: visible !important;
+    }
+
+    .flex-1 {
+        display: block !important;
+    }
+
+    .lg\:w-1\/2 {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .custom-scrollbar {
+        overflow: visible !important;
+        height: auto !important;
+    }
+}
+
+/* Hover effects for cards */
+.similar-product-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.similar-product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Image container zoom fix */
+.product-image-container {
+    mask-image: linear-gradient(to bottom, black 0%, black 100%);
+    /* Clean edges */
+}

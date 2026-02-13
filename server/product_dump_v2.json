@@ -1,0 +1,77 @@
+[
+  {
+    "_id": "698326b8bcc3fda13719bbda",
+    "name": "Cherry Ruched Square Neck Ruffle High-Low Midi Dress",
+    "isPublished": true,
+    "createdAt": "2026-02-04T11:00:08.461Z",
+    "status": "approved"
+  },
+  {
+    "_id": "69832d95a161e460f33bffe2",
+    "name": "Floral tiered corset gown with sheer ruffles with detachable skirt",
+    "isPublished": true,
+    "createdAt": "2026-02-04T11:29:25.215Z",
+    "status": "approved"
+  },
+  {
+    "_id": "6984366c698e154692a729bb",
+    "name": "Velvet Asymmetrical Neck Bowknot Mini Dress in Maroon",
+    "isPublished": true,
+    "createdAt": "2026-02-05T06:19:24.677Z",
+    "status": "approved"
+  },
+  {
+    "_id": "69843d145a2e8692bd676ebb",
+    "name": "Square Neck Sleeveless Sundress Midi Dress in Herbal",
+    "isPublished": true,
+    "createdAt": "2026-02-05T06:47:48.724Z",
+    "status": "approved"
+  },
+  {
+    "_id": "6989816f3c15a212ed91d590",
+    "name": "Ribbed Long Sleeve Flared Hem Statement",
+    "isPublished": true,
+    "createdAt": "2026-02-09T06:40:47.323Z",
+    "status": "approved"
+  },
+  {
+    "status": "pending",
+    "_id": "6989a47756ac4043ee227b0c",
+    "name": "Blue ribbed top",
+    "vendorId": 2,
+    "isPublished": true,
+    "createdAt": "2026-02-09T09:10:15.857Z"
+  },
+  {
+    "_id": "6989b5d3d8ec40584ac05ae8",
+    "name": "Womens Solid Drawstring Full Sleeve Hoodie ",
+    "vendorId": 2,
+    "isPublished": true,
+    "status": "approved",
+    "createdAt": "2026-02-09T10:24:19.304Z"
+  },
+  {
+    "_id": "6989b945e5d32309d1494c71",
+    "name": "Corset Straps Sleeveless Lace-up Tank Tops",
+    "vendorId": 2,
+    "isPublished": true,
+    "status": "rejected",
+    "createdAt": "2026-02-09T10:39:01.132Z"
+  },
+  {
+    "_id": "6989c34c3034d28383288b41",
+    "name": "Pants",
+    "vendorId": 2,
+    "isPublished": true,
+    "status": "pending",
+    "createdAt": "2026-02-09T11:21:48.768Z"
+  },
+  {
+    "_id": "698acf2655f62030bf4e1704",
+    "name": "Burgandy Colour Bodycon",
+    "vendorId": 2,
+    "isPublished": true,
+    "status": "pending",
+    "createdAt": "2026-02-10T06:24:38.542Z"
+  }
+]

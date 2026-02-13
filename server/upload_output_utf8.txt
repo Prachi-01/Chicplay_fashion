@@ -1,0 +1,47 @@
+﻿[dotenv@17.2.3] injecting env (11) from .env -- tip: ΓÜÖ∩╕Å  suppress all logs with { quiet: true }
+≡ƒÄ¼ Starting Scene Image Upload to Cloudinary...
+
+≡ƒôñ Uploading Tropical Beach...
+Γ£à Uploaded Tropical Beach
+   URL: https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803874/chicplay/scenes/beach_scene_bg.jpg
+   Thumbnail: https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/beach_scene_bg?_a=BAMAOGP/0
+
+≡ƒôñ Uploading Modern Office...
+Γ£à Uploaded Modern Office
+   URL: https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803875/chicplay/scenes/office_scene_bg.jpg
+   Thumbnail: https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/office_scene_bg?_a=BAMAOGP/0
+
+≡ƒôñ Uploading Romantic Evening...
+Γ£à Uploaded Romantic Evening
+   URL: https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803877/chicplay/scenes/datenight_scene_bg.jpg
+   Thumbnail: https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/datenight_scene_bg?_a=BAMAOGP/0
+
+≡ƒôñ Uploading Cozy Caf├⌐...
+Γ£à Uploaded Cozy Caf├⌐
+   URL: https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803879/chicplay/scenes/casualday_scene_bg.jpg
+   Thumbnail: https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/casualday_scene_bg?_a=BAMAOGP/0
+
+
+≡ƒô¥ Scene URLs for seedScenes.js:
+
+Copy and paste these into your seedScenes.js file:
+
+const coreScenes = [
+  // Tropical Beach
+  image_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803874/chicplay/scenes/beach_scene_bg.jpg",
+  thumbnail_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/beach_scene_bg?_a=BAMAOGP/0",
+
+  // Modern Office
+  image_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803875/chicplay/scenes/office_scene_bg.jpg",
+  thumbnail_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/office_scene_bg?_a=BAMAOGP/0",
+
+  // Romantic Evening
+  image_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803877/chicplay/scenes/datenight_scene_bg.jpg",
+  thumbnail_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/datenight_scene_bg?_a=BAMAOGP/0",
+
+  // Cozy Caf├⌐
+  image_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/v1768803879/chicplay/scenes/casualday_scene_bg.jpg",
+  thumbnail_url: "https://res.cloudinary.com/dtwc1mnac/image/upload/c_thumb,h_150,q_auto,w_200/v1/chicplay/scenes/casualday_scene_bg?_a=BAMAOGP/0",
+];
+
+≡ƒÄë Upload complete! Update seedScenes.js with the URLs above.

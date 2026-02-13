@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+:root {
+  font-family: 'Outfit', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #FFF3E0;
+  /* Cream base */
+  color: #6F4E37;
+  /* Mocha text */
+}
+
+@theme {
+  /* User Requested Palette */
+  --color-blush: #E6B7C8;
+  --color-mocha: #6F4E37;
+  --color-cream: #FFF3E0;
+  --color-rosegold: #B76E79;
+
+  /* Utilities */
+  --color-paper: #ffffff;
+
+  --font-sans: Inter, sans-serif;
+
+  --animate-blob: blob 7s infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-pulse-slow: pulse-slow 3s infinite ease-in-out;
+  --animate-bounce-slow: bounce-slow 4s infinite ease-in-out;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.1;
+    }
+
+    50% {
+      transform: scale(1.05);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes bounce-slow {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Gamification Animations */
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+  --animate-float-up: float-up 0.8s ease-out forwards;
+  --animate-counter-bounce: counter-bounce 0.3s ease-out;
+  --animate-fire-flicker: fire-flicker 0.5s ease-in-out infinite;
+  --animate-achievement-pop: achievement-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animate-xp-fill: xp-fill 1s ease-out forwards;
+
+  @keyframes glow-pulse {
+
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(20, 184, 166, 0.3);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.6), 0 0 30px rgba(20, 184, 166, 0.4);
+    }
+  }
+
+  @keyframes float-up {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(0.8);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-40px) scale(1.2);
+    }
+  }
+
+  @keyframes counter-bounce {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fire-flicker {
+
+    0%,
+    100% {
+      transform: scale(1) rotate(0deg);
+      filter: brightness(1);
+    }
+
+    25% {
+      transform: scale(1.05) rotate(2deg);
+      filter: brightness(1.1);
+    }
+
+    50% {
+      transform: scale(1.1) rotate(-1deg);
+      filter: brightness(1.2);
+    }
+
+    75% {
+      transform: scale(1.05) rotate(1deg);
+      filter: brightness(1.1);
+    }
+  }
+
+  @keyframes achievement-pop {
+    0% {
+      transform: scale(0) rotate(-180deg);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes xp-fill {
+    0% {
+      width: 0%;
+    }
+
+    100% {
+      width: var(--xp-width, 75%);
+    }
+  }
+
+  @keyframes streak-fire {
+
+    0%,
+    100% {
+      color: #f97316;
+      text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    }
+
+    50% {
+      color: #ea580c;
+      text-shadow: 0 0 20px rgba(234, 88, 12, 0.8), 0 0 30px rgba(249, 115, 22, 0.4);
+    }
+  }
+}

@@ -1,0 +1,76 @@
+.dynamic-product-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 50px;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 8px 16px -4px var(--badge-color);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+}
+
+.badge-glass-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent);
+    animation: badge-shine 3s infinite;
+}
+
+@keyframes badge-shine {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.badge-icon {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+    animation: icon-float 2s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.badge-label {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Priority positioning on product card */
+.product-badge-container {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 20;
+    pointer-events: none;
+}

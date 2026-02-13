@@ -1,0 +1,162 @@
+[
+  {
+    "Field": "id",
+    "Type": "int(11)",
+    "Null": "NO",
+    "Key": "PRI",
+    "Default": null,
+    "Extra": "auto_increment"
+  },
+  {
+    "Field": "userId",
+    "Type": "int(11)",
+    "Null": "NO",
+    "Key": "UNI",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "storeName",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "UNI",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "businessType",
+    "Type": "enum('Individual','Proprietorship','Pvt Ltd','LLP')",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "ownerName",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "phone",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "panNumber",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "gstNumber",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "pickupAddress",
+    "Type": "text",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "bankAccountHolder",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "bankAccountNumber",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "bankIfsc",
+    "Type": "varchar(255)",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "status",
+    "Type": "enum('Pending','Active','Rejected')",
+    "Null": "YES",
+    "Key": "",
+    "Default": "Pending",
+    "Extra": ""
+  },
+  {
+    "Field": "rejectionReason",
+    "Type": "text",
+    "Null": "YES",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "panCardUrl",
+    "Type": "varchar(255)",
+    "Null": "YES",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "gstCertUrl",
+    "Type": "varchar(255)",
+    "Null": "YES",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "businessProofUrl",
+    "Type": "varchar(255)",
+    "Null": "YES",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "addressProofUrl",
+    "Type": "varchar(255)",
+    "Null": "YES",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "createdAt",
+    "Type": "datetime",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  },
+  {
+    "Field": "updatedAt",
+    "Type": "datetime",
+    "Null": "NO",
+    "Key": "",
+    "Default": null,
+    "Extra": ""
+  }
+]

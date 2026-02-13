@@ -1,0 +1,23 @@
+{
+    "name": "chicplay-fashion-root",
+    "version": "1.0.0",
+    "description": "Root script to run full stack project",
+    "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "cd server && npx nodemon index.js",
+        "client": "cd client && npm run dev",
+        "build": "cd client && npm run build",
+        "install-all": "npm install && cd client && npm install && cd server && npm install",
+        "seed:dev": "node server/seed/seedData.js",
+        "seed:reset": "node server/seed/seedData.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^8.2.0"
+    },
+    "dependencies": {
+        "axios": "^1.13.2"
+    }
+}
