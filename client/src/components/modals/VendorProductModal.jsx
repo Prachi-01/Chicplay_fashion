@@ -21,6 +21,24 @@ const OCCASIONS = [
     { name: 'Everyday', icon: '👕' }
 ];
 
+const FOOTWEAR_SIZES_NUMERIC = [
+    { size: '35', quantity: 0 },
+    { size: '36', quantity: 0 },
+    { size: '37', quantity: 0 },
+    { size: '38', quantity: 0 },
+    { size: '39', quantity: 0 },
+    { size: '40', quantity: 0 },
+    { size: '41', quantity: 0 }
+];
+
+const CLOTHING_SIZES_DEFAULT = [
+    { size: 'XS', quantity: 0 },
+    { size: 'S', quantity: 0 },
+    { size: 'M', quantity: 0 },
+    { size: 'L', quantity: 0 },
+    { size: 'XL', quantity: 0 }
+];
+
 const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
     const fileInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -32,14 +50,10 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
         price: '',
         category: 'dresses',
         description: '',
-        archetype: 'Romantic Dreamer',
-        mood: '',
-        occasion: '',
-        sizeStock: [
-            { size: 'S', quantity: 0 },
-            { size: 'M', quantity: 0 },
-            { size: 'L', quantity: 0 }
-        ],
+        archetype: ['Romantic Dreamer'],
+        mood: [],
+        occasion: [],
+        sizeStock: CLOTHING_SIZES_DEFAULT,
         isPublished: true,
         colorVariations: [],
         specifications: [],
@@ -57,14 +71,10 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
                 price: product.price || '',
                 category: product.category || 'dresses',
                 description: product.description || '',
-                archetype: product.archetype || 'Romantic Dreamer',
-                mood: product.mood || '',
-                occasion: product.occasion || '',
-                sizeStock: product.sizeStock || [
-                    { size: 'S', quantity: 0 },
-                    { size: 'M', quantity: 0 },
-                    { size: 'L', quantity: 0 }
-                ],
+                archetype: Array.isArray(product.archetype) ? product.archetype : (product.archetype ? [product.archetype] : ['Romantic Dreamer']),
+                mood: Array.isArray(product.mood) ? product.mood : (product.mood ? [product.mood] : []),
+                occasion: Array.isArray(product.occasion) ? product.occasion : (product.occasion ? [product.occasion] : []),
+                sizeStock: product.sizeStock || CLOTHING_SIZES_DEFAULT,
                 isPublished: product.isPublished !== undefined ? product.isPublished : true,
                 colorVariations: product.colorVariations || [],
                 specifications: product.specifications || [],
@@ -81,14 +91,10 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
                 price: '',
                 category: 'dresses',
                 description: '',
-                archetype: 'Romantic Dreamer',
-                mood: '',
-                occasion: '',
-                sizeStock: [
-                    { size: 'S', quantity: 0 },
-                    { size: 'M', quantity: 0 },
-                    { size: 'L', quantity: 0 }
-                ],
+                archetype: ['Romantic Dreamer'],
+                mood: [],
+                occasion: [],
+                sizeStock: CLOTHING_SIZES_DEFAULT,
                 isPublished: true,
                 colorVariations: [],
                 specifications: [],
@@ -101,6 +107,31 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
             setPreviewImage(null);
         }
     }, [product, isOpen]);
+
+    // Handle conditional size stock based on category
+    useEffect(() => {
+        const cat = formData.category.toLowerCase();
+        const isShoes = cat === 'shoes';
+        const isAccessory = cat === 'accessories' || cat === 'accessory';
+
+        let expectedSizes = CLOTHING_SIZES_DEFAULT;
+        if (isShoes) expectedSizes = FOOTWEAR_SIZES_NUMERIC;
+        if (isAccessory) expectedSizes = [{ size: 'Free Size', quantity: 0 }];
+
+        // Sync main sizeStock
+        const currentSizesMain = formData.sizeStock.map(s => s.size);
+        const needsMainSync = currentSizesMain.length !== expectedSizes.length || !currentSizesMain.every(s => expectedSizes.some(e => e.size === s));
+
+        if (needsMainSync) {
+            setFormData(prev => ({
+                ...prev,
+                sizeStock: expectedSizes.map(target => {
+                    const existing = prev.sizeStock.find(s => s.size === target.size);
+                    return existing || { ...target };
+                })
+            }));
+        }
+    }, [formData.category]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -319,16 +350,20 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">Stock by Size</label>
-                                    <div className="grid grid-cols-3 gap-3">
+                                    <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+                                        {formData.category === 'accessories' ? 'Stock Quantity (Free Size)' : 'Stock by Size'}
+                                    </label>
+                                    <div className={formData.category === 'accessories' ? 'w-full' : 'grid grid-cols-3 gap-3'}>
                                         {formData.sizeStock.map((s) => (
-                                            <div key={s.size} className="bg-white p-3 rounded-2xl shadow-sm border border-gray-50">
-                                                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{s.size}</label>
+                                            <div key={s.size} className={`bg-white p-3 rounded-2xl shadow-sm border border-gray-100 transition-all focus-within:border-pink-200 focus-within:ring-2 focus-within:ring-pink-50 ${formData.category === 'accessories' ? 'flex items-center justify-between px-6' : ''}`}>
+                                                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                                                    {formData.category === 'accessories' ? 'Free Size' : s.size}
+                                                </label>
                                                 <input
                                                     type="number"
                                                     value={s.quantity}
                                                     onChange={(e) => handleStockChange(s.size, e.target.value)}
-                                                    className="w-full bg-transparent font-black text-lg outline-none text-gray-900"
+                                                    className={`bg-transparent font-black outline-none text-gray-900 ${formData.category === 'accessories' ? 'text-2xl text-right w-32' : 'w-full text-lg'}`}
                                                 />
                                             </div>
                                         ))}
@@ -336,50 +371,99 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Style Archetype</label>
-                                    <select
-                                        value={formData.archetype}
-                                        onChange={(e) => setFormData({ ...formData, archetype: e.target.value })}
-                                        className="w-full px-5 py-4 bg-white rounded-2xl border-2 border-transparent focus:border-pink-200 outline-none font-bold text-gray-900 shadow-sm appearance-none"
-                                    >
-                                        <option>Romantic Dreamer</option>
-                                        <option>Boho Free Spirit</option>
-                                        <option>Modern Minimalist</option>
-                                        <option>Classic Elegance</option>
-                                        <option>Edgy Trendsetter</option>
-                                    </select>
+                                    <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+                                        <Sparkles size={14} className="text-pink-500" />
+                                        Style Archetypes (Select Multiple)
+                                    </label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {['Romantic Dreamer', 'Boho Free Spirit', 'Modern Minimalist', 'Classic Elegance', 'Edgy Trendsetter'].map(arch => {
+                                            const isSelected = (formData.archetype || []).includes(arch);
+                                            return (
+                                                <button
+                                                    key={arch}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const current = formData.archetype || [];
+                                                        const next = isSelected
+                                                            ? current.filter(a => a !== arch)
+                                                            : [...current, arch];
+                                                        setFormData({ ...formData, archetype: next });
+                                                    }}
+                                                    className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 text-left flex items-center gap-2 ${isSelected
+                                                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent shadow-md'
+                                                        : 'bg-white border-gray-100 text-gray-600 hover:border-pink-200'
+                                                        }`}
+                                                >
+                                                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'bg-white border-white' : 'border-gray-300'}`}>
+                                                        {isSelected && <Check size={10} className="text-pink-500" />}
+                                                    </div>
+                                                    {arch}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
 
                                 {/* Mood Selector */}
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
                                         <Sparkles size={14} className="text-pink-500" />
-                                        Mood
+                                        Moods (Select Multiple)
                                     </label>
                                     <div className="flex flex-wrap gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, mood: '' })}
-                                            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${!formData.mood
-                                                ? 'bg-gray-200 text-gray-700 border-gray-300'
-                                                : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
-                                                }`}
-                                        >
-                                            None
-                                        </button>
-                                        {MOODS.map(mood => (
-                                            <button
-                                                key={mood.id}
-                                                type="button"
-                                                onClick={() => setFormData({ ...formData, mood: mood.id })}
-                                                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${formData.mood === mood.id
-                                                    ? `${mood.style} border-transparent shadow-lg scale-105`
-                                                    : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
-                                                    }`}
-                                            >
-                                                <span>{mood.icon}</span>
-                                                <span>{mood.name}</span>
-                                            </button>
+                                        {MOODS.map(mood => {
+                                            const isSelected = (formData.mood || []).includes(mood.id);
+                                            return (
+                                                <button
+                                                    key={mood.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const current = formData.mood || [];
+                                                        const next = isSelected
+                                                            ? current.filter(m => m !== mood.id)
+                                                            : [...current, mood.id];
+                                                        setFormData({ ...formData, mood: next });
+                                                    }}
+                                                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${isSelected
+                                                        ? `${mood.style} border-transparent shadow-lg scale-105`
+                                                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
+                                                        }`}
+                                                >
+                                                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'bg-white border-white' : 'border-gray-300'}`}>
+                                                        {isSelected && <Check size={10} className="text-gray-700" />}
+                                                    </div>
+                                                    <span>{mood.icon}</span>
+                                                    <span>{mood.name}</span>
+                                                </button>
+                                            );
+                                        })}
+                                        <input
+                                            type="text"
+                                            placeholder="+ Custom Mood"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    const val = e.target.value.trim().toLowerCase();
+                                                    if (val && !formData.mood.includes(val)) {
+                                                        setFormData(prev => ({ ...prev, mood: [...prev.mood, val] }));
+                                                        e.target.value = '';
+                                                    }
+                                                }
+                                            }}
+                                            className="px-4 py-2 rounded-xl border-2 border-dashed border-pink-200 text-xs font-bold bg-pink-50/30 focus:border-pink-400 focus:bg-white focus:border-solid outline-none transition-all placeholder:text-pink-300 w-32 shadow-inner"
+                                        />
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {formData.mood.filter(m => !MOODS.find(def => def.id === m)).map(m => (
+                                            <span key={m} className="px-3 py-1.5 bg-gradient-to-r from-pink-50 to-rose-50 text-pink-600 rounded-xl text-[10px] font-black flex items-center gap-2 border border-pink-100 shadow-sm">
+                                                <Sparkles size={8} className="text-pink-400" />
+                                                {m}
+                                                <X
+                                                    size={12}
+                                                    className="cursor-pointer hover:bg-pink-200 rounded-full p-0.5"
+                                                    onClick={() => setFormData(prev => ({ ...prev, mood: prev.mood.filter(item => item !== m) }))}
+                                                />
+                                            </span>
                                         ))}
                                     </div>
                                 </div>
@@ -388,32 +472,62 @@ const VendorProductModal = ({ isOpen, onClose, product, onProductSaved }) => {
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
                                         <Calendar size={14} className="text-pink-500" />
-                                        Occasion
+                                        Occasions (Select Multiple)
                                     </label>
                                     <div className="flex flex-wrap gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, occasion: '' })}
-                                            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${!formData.occasion
-                                                ? 'bg-gray-200 text-gray-700 border-gray-300'
-                                                : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
-                                                }`}
-                                        >
-                                            None
-                                        </button>
-                                        {OCCASIONS.map(occasion => (
-                                            <button
-                                                key={occasion.name}
-                                                type="button"
-                                                onClick={() => setFormData({ ...formData, occasion: occasion.name })}
-                                                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${formData.occasion === occasion.name
-                                                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-transparent shadow-lg scale-105'
-                                                    : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
-                                                    }`}
-                                            >
-                                                <span>{occasion.icon}</span>
-                                                <span>{occasion.name}</span>
-                                            </button>
+                                        {OCCASIONS.map(occ => {
+                                            const isSelected = (formData.occasion || []).includes(occ.name);
+                                            return (
+                                                <button
+                                                    key={occ.name}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const current = formData.occasion || [];
+                                                        const next = isSelected
+                                                            ? current.filter(o => o !== occ.name)
+                                                            : [...current, occ.name];
+                                                        setFormData({ ...formData, occasion: next });
+                                                    }}
+                                                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 ${isSelected
+                                                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-transparent shadow-lg scale-105'
+                                                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
+                                                        }`}
+                                                >
+                                                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'bg-white border-white' : 'border-gray-300'}`}>
+                                                        {isSelected && <Check size={10} className="text-pink-500" />}
+                                                    </div>
+                                                    <span>{occ.icon}</span>
+                                                    <span>{occ.name}</span>
+                                                </button>
+                                            );
+                                        })}
+                                        <input
+                                            type="text"
+                                            placeholder="+ Custom Occasion"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    const val = e.target.value.trim();
+                                                    if (val && !formData.occasion.includes(val)) {
+                                                        setFormData(prev => ({ ...prev, occasion: [...prev.occasion, val] }));
+                                                        e.target.value = '';
+                                                    }
+                                                }
+                                            }}
+                                            className="px-4 py-2 rounded-xl border-2 border-dashed border-pink-200 text-xs font-bold bg-pink-50/30 focus:border-pink-400 focus:bg-white focus:border-solid outline-none transition-all placeholder:text-pink-300 w-40 shadow-inner"
+                                        />
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {formData.occasion.filter(o => !OCCASIONS.find(def => def.name === o)).map(o => (
+                                            <span key={o} className="px-3 py-1.5 bg-gradient-to-r from-pink-50 to-rose-50 text-pink-600 rounded-xl text-[10px] font-black flex items-center gap-2 border border-pink-100 shadow-sm">
+                                                <Calendar size={8} className="text-pink-400" />
+                                                {o}
+                                                <X
+                                                    size={12}
+                                                    className="cursor-pointer hover:bg-pink-200 rounded-full p-0.5"
+                                                    onClick={() => setFormData(prev => ({ ...prev, occasion: prev.occasion.filter(item => item !== o) }))}
+                                                />
+                                            </span>
                                         ))}
                                     </div>
                                 </div>

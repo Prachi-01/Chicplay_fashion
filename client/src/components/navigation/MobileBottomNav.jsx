@@ -1,13 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, ShoppingBag, Sparkles, Gamepad2, User } from 'lucide-react';
+import { Home, ShoppingBag, Target, Gamepad2, User, Sparkles } from 'lucide-react';
 
 const NAV_ITEMS = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/shop', icon: ShoppingBag, label: 'Shop' },
-    { path: '/dressing-room', icon: Sparkles, label: 'Try-On' },
-    { path: '/game-zone', icon: Gamepad2, label: 'Games' },
-    { path: '/orders', icon: User, label: 'Orders' }
+    { path: '/dresses', icon: Sparkles, label: 'Dresses' },
+    { path: '/dressing-room', icon: Target, label: 'Try-On' },
+    { path: '/game-zone', icon: Gamepad2, label: 'Games' }
 ];
 
 const MobileBottomNav = () => {

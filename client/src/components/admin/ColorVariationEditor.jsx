@@ -6,9 +6,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import ColorAutocomplete from './ColorAutocomplete';
 
+const FOOTWEAR_SIZES = ['35', '36', '37', '38', '39', '40', '41'];
+const CLOTHING_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+
 const ColorVariationEditor = ({ variations, setVariations, onUploadingChange, productName, category }) => {
     const [expandedIndex, setExpandedIndex] = useState(0);
     const [uploading, setUploading] = useState({}); // { 'idx-type': true }
+
+    // Synchronize variations when category changes
+    useEffect(() => {
+        if (!category) return;
+
+        const isShoes = category.toLowerCase() === 'shoes';
+        const expectedSizes = isShoes ? FOOTWEAR_SIZES : CLOTHING_SIZES;
+
+        const needsUpdate = variations.some(v => {
+            const currentSizes = v.sizeStock.map(s => s.size);
+            return currentSizes.length !== expectedSizes.length || !currentSizes.every(s => expectedSizes.includes(s));
+        });
+
+        if (needsUpdate) {
+            const updatedVariations = variations.map(v => ({
+                ...v,
+                sizeStock: expectedSizes.map(size => {
+                    const existing = v.sizeStock.find(s => s.size === size);
+                    return existing || { size, quantity: 0 };
+                })
+            }));
+            setVariations(updatedVariations);
+        }
+    }, [category]);
 
     // Helper to create slugs
     const slugify = (text) => {
@@ -29,6 +56,9 @@ const ColorVariationEditor = ({ variations, setVariations, onUploadingChange, pr
     }, [uploading, onUploadingChange]);
 
     const addVariation = () => {
+        const isShoes = category?.toLowerCase() === 'shoes';
+        const defaultSizes = isShoes ? FOOTWEAR_SIZES : CLOTHING_SIZES;
+
         const newVariation = {
             colorName: 'New Color',
             hexCode: '#000000',
@@ -39,13 +69,7 @@ const ColorVariationEditor = ({ variations, setVariations, onUploadingChange, pr
                 fabric: '',
                 lifestyle: ''
             },
-            sizeStock: [
-                { size: 'XS', quantity: 0 },
-                { size: 'S', quantity: 0 },
-                { size: 'M', quantity: 0 },
-                { size: 'L', quantity: 0 },
-                { size: 'XL', quantity: 0 }
-            ],
+            sizeStock: defaultSizes.map(size => ({ size, quantity: 0 })),
             available: true
         };
         setVariations([...variations, newVariation]);

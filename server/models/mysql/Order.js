@@ -11,6 +11,10 @@ const Order = sequelize.define('Order', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     totalAmount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false

@@ -35,12 +35,10 @@ const productSchema = new mongoose.Schema({
         type: String // e.g., 'Romantic Dreamer', 'Boho Free Spirit'
     }],
     mood: [{
-        type: String,
-        enum: ['romantic', 'powerful', 'creative', 'casual']
+        type: String
     }],
     occasion: [{
-        type: String,
-        enum: ['Beach', 'Wedding Guest', 'Work', 'Date Night', 'Everyday']
+        type: String
     }],
     brand: {
         type: String

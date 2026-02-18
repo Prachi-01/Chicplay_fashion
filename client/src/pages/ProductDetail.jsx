@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShoppingBag, Heart, Share2, Star, Truck, ShieldCheck,
@@ -12,6 +13,8 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
 import ProductBadge from '../components/product/ProductBadge';
+import SizeCalculator from '../components/SizeCalculator';
+import FootwearSizeModal from '../components/modals/FootwearSizeModal';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -28,6 +31,8 @@ const ProductDetail = () => {
     const [selectedSize, setSelectedSize] = useState('');
     const [similarProducts, setSimilarProducts] = useState([]);
     const [showCartModal, setShowCartModal] = useState(false);
+    const [showSizeModal, setShowSizeModal] = useState(false);
+    const [showFootwearSizeModal, setShowFootwearSizeModal] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
     const [showFullReviewModal, setShowFullReviewModal] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
@@ -449,7 +454,22 @@ const ProductDetail = () => {
                             {/* Size Selection */}
                             {currentSizeStock && currentSizeStock.length > 0 && (
                                 <div>
-                                    <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Available Sizes</h4>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest">Available Sizes</h4>
+                                        <button
+                                            onClick={() => {
+                                                if (product.category === 'shoes') {
+                                                    setShowFootwearSizeModal(true);
+                                                } else {
+                                                    setShowSizeModal(true);
+                                                }
+                                            }}
+                                            className="flex items-center gap-1.5 text-rosegold hover:text-mocha transition-colors text-xs font-bold uppercase tracking-wider group"
+                                        >
+                                            <Ruler size={16} className="group-hover:scale-110 transition-transform" />
+                                            {product.category === 'shoes' ? 'Size Chart' : 'Size Calculator'}
+                                        </button>
+                                    </div>
                                     <div className="flex flex-wrap gap-3">
                                         {currentSizeStock.map(s => {
                                             const isOutOfStock = s.quantity <= 0;
@@ -908,6 +928,23 @@ const ProductDetail = () => {
                             </div>
                         </motion.div>
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Size Modals */}
+            <AnimatePresence>
+                {showSizeModal && createPortal(
+                    <SizeCalculator
+                        onClose={() => setShowSizeModal(false)}
+                    />,
+                    document.body
+                )}
+                {showFootwearSizeModal && createPortal(
+                    <FootwearSizeModal
+                        isOpen={showFootwearSizeModal}
+                        onClose={() => setShowFootwearSizeModal(false)}
+                    />,
+                    document.body
                 )}
             </AnimatePresence>
         </div >

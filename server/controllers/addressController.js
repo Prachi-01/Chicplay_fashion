@@ -17,7 +17,7 @@ exports.addAddress = async (req, res) => {
     try {
         console.log('Adding address for user:', req.user);
         console.log('Address data:', req.body);
-        const { fullName, phoneNumber, addressLine, city, state, pincode, landmark, isDefault } = req.body;
+        const { fullName, email, phoneNumber, addressLine, city, state, pincode, landmark, isDefault } = req.body;
 
         if (!fullName || !phoneNumber || !addressLine || !city || !state || !pincode) {
             console.log('Validation failed: Missing required fields');
@@ -32,6 +32,7 @@ exports.addAddress = async (req, res) => {
         const address = await Address.create({
             userId: req.user.id,
             fullName,
+            email,
             phoneNumber,
             addressLine,
             city,
@@ -45,6 +46,40 @@ exports.addAddress = async (req, res) => {
     } catch (error) {
         console.error('Error adding address:', error);
         res.status(500).json({ message: 'Failed to add address: ' + error.message });
+    }
+};
+
+exports.updateAddress = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { fullName, email, phoneNumber, addressLine, city, state, pincode, landmark, isDefault } = req.body;
+
+        const address = await Address.findOne({ where: { id, userId: req.user.id } });
+
+        if (!address) {
+            return res.status(404).json({ message: 'Address not found' });
+        }
+
+        if (isDefault) {
+            await Address.update({ isDefault: false }, { where: { userId: req.user.id } });
+        }
+
+        await address.update({
+            fullName: fullName || address.fullName,
+            email: email || address.email,
+            phoneNumber: phoneNumber || address.phoneNumber,
+            addressLine: addressLine || address.addressLine,
+            city: city || address.city,
+            state: state || address.state,
+            pincode: pincode || address.pincode,
+            landmark: landmark !== undefined ? landmark : address.landmark,
+            isDefault: isDefault !== undefined ? isDefault : address.isDefault
+        });
+
+        res.json(address);
+    } catch (error) {
+        console.error('Error updating address:', error);
+        res.status(500).json({ message: 'Failed to update address' });
     }
 };
 

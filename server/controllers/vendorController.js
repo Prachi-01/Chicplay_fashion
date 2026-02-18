@@ -218,11 +218,14 @@ exports.updateVendorStatus = async (req, res) => {
 // Vendor: Get Profile
 exports.getVendorProfile = async (req, res) => {
     try {
-        const vendor = await VendorProfile.findOne({ where: { userId: req.user.id } });
+        const vendor = await VendorProfile.findOne({
+            where: { userId: req.user.id },
+            include: [{ model: User, attributes: ['email', 'avatarUrl'] }]
+        });
         if (!vendor) return res.status(404).json({ message: 'Vendor profile not found' });
         res.json(vendor);
     } catch (err) {
-        console.error(err.message);
+        console.error('🔥 Error in getVendorProfile:', err);
         res.status(500).send('Server Error');
     }
 };
@@ -232,12 +235,16 @@ exports.getVendorOrders = async (req, res) => {
     try {
         const orders = await OrderItem.findAll({
             where: { vendorId: req.user.id },
-            include: [{ model: Order, attributes: ['userId', 'status', 'createdAt'] }],
+            include: [{
+                model: Order,
+                as: 'Order',
+                attributes: ['userId', 'status', 'createdAt']
+            }],
             order: [['createdAt', 'DESC']]
         });
         res.json(orders);
     } catch (err) {
-        console.error(err.message);
+        console.error('🔥 Error in getVendorOrders:', err);
         res.status(500).send('Server Error');
     }
 };
@@ -248,7 +255,7 @@ exports.getVendorProducts = async (req, res) => {
         const products = await Product.find({ vendorId: req.user.id });
         res.json(products);
     } catch (error) {
-        console.error(error);
+        console.error('🔥 Error in getVendorProducts:', error);
         res.status(500).json({ message: 'Server Error' });
     }
 };

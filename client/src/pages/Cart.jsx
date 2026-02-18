@@ -138,6 +138,7 @@ const Cart = () => {
     const [addressLoading, setAddressLoading] = useState(false);
     const [newAddress, setNewAddress] = useState({
         fullName: '',
+        email: '',
         phoneNumber: '',
         addressLine: '',
         city: '',
@@ -146,6 +147,7 @@ const Cart = () => {
         landmark: ''
     });
     const [isSavingAddress, setIsSavingAddress] = useState(false);
+    const [editingAddressId, setEditingAddressId] = useState(null);
 
     useEffect(() => {
         if (step === 2) {
@@ -190,13 +192,23 @@ const Cart = () => {
 
         setIsSavingAddress(true);
         try {
-            const res = await api.post('/addresses', newAddress);
-            toast.success("Address saved!");
-            setAddresses([...addresses, res.data]);
+            let res;
+            if (editingAddressId) {
+                res = await api.put(`/addresses/${editingAddressId}`, newAddress);
+                toast.success("Address updated!");
+                setAddresses(addresses.map(a => a.id === editingAddressId ? res.data : a));
+                setEditingAddressId(null);
+            } else {
+                res = await api.post('/addresses', newAddress);
+                toast.success("Address saved!");
+                setAddresses([...addresses, res.data]);
+            }
+
             setSelectedAddress(res.data);
             setShowAddressForm(false);
             setNewAddress({
                 fullName: '',
+                email: '',
                 phoneNumber: '',
                 addressLine: '',
                 city: '',
@@ -204,7 +216,7 @@ const Cart = () => {
                 pincode: '',
                 landmark: ''
             });
-            // Automatically proceed to Step 3 (Payment) after saving
+            // Automatically proceed to Step 3 (Payment) after saving/updating
             setStep(3);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err) {
@@ -271,7 +283,8 @@ const Cart = () => {
         try {
             const response = await api.post('/orders', {
                 items: cart,
-                totalAmount: finalTotal
+                totalAmount: finalTotal,
+                address: selectedAddress
             }, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
@@ -280,7 +293,10 @@ const Cart = () => {
                 id: response.data.orderId,
                 points: response.data.xpEarned + 300,
                 newBadge: response.data.levelUp ? "Fashion Legend" : "Fashion Investor",
-                savings: appliedDiscount + badgeDiscount + streakDiscount
+                savings: appliedDiscount + badgeDiscount + streakDiscount,
+                items: [...cart],
+                total: finalTotal,
+                address: selectedAddress
             });
 
             addPoints(response.data.xpEarned + 300);
@@ -296,7 +312,7 @@ const Cart = () => {
     };
 
 
-    if (cart.length === 0 && step !== 3) {
+    if (cart.length === 0 && step !== 3 && step !== 4) {
         return (
             <div className="min-h-screen bg-[#FFF5F7] flex flex-col items-center justify-center p-8 text-center font-outfit">
                 <motion.div
@@ -616,11 +632,25 @@ const Cart = () => {
                         >
                             <div className="flex flex-col md:flex-row gap-12">
                                 <div className="flex-1 space-y-8">
+                                    {/* Address list header */}
                                     <div className="flex items-center justify-between">
                                         <h2 className="text-3xl font-black text-gray-800 uppercase tracking-tight">Shipping Address</h2>
                                         {!showAddressForm && addresses.length > 0 && (
                                             <button
-                                                onClick={() => setShowAddressForm(true)}
+                                                onClick={() => {
+                                                    setEditingAddressId(null);
+                                                    setNewAddress({
+                                                        fullName: '',
+                                                        email: '',
+                                                        phoneNumber: '',
+                                                        addressLine: '',
+                                                        city: '',
+                                                        state: '',
+                                                        pincode: '',
+                                                        landmark: ''
+                                                    });
+                                                    setShowAddressForm(true);
+                                                }}
                                                 className="text-sm font-black text-rose-500 uppercase tracking-widest hover:text-rose-600 transition-colors flex items-center gap-2"
                                             >
                                                 <Plus className="w-5 h-5" /> Add New Address
@@ -658,6 +688,18 @@ const Cart = () => {
                                                         onChange={(e) => setNewAddress({ ...newAddress, phoneNumber: e.target.value })}
                                                     />
                                                 </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Email Address *</label>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    placeholder="your@email.com"
+                                                    className="w-full bg-white border-2 border-transparent focus:border-rose-500 rounded-2xl p-4 font-bold outline-none transition-all shadow-sm"
+                                                    value={newAddress.email}
+                                                    onChange={(e) => setNewAddress({ ...newAddress, email: e.target.value })}
+                                                />
+                                                <p className="text-[10px] text-gray-400 px-2">📧 Order confirmation will be sent here</p>
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Address Line</label>
@@ -722,12 +764,24 @@ const Cart = () => {
                                                     disabled={isSavingAddress}
                                                     className={`flex-1 text-white py-5 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl ${isSavingAddress ? 'bg-gray-400' : 'bg-gray-800 hover:bg-gray-900'}`}
                                                 >
-                                                    {isSavingAddress ? 'Saving...' : 'Save Address'}
+                                                    {isSavingAddress ? 'Saving...' : (editingAddressId ? 'Update Address' : 'Save Address')}
                                                 </button>
                                                 {addresses.length > 0 && (
                                                     <button
                                                         type="button"
-                                                        onClick={() => setShowAddressForm(false)}
+                                                        onClick={() => {
+                                                            setShowAddressForm(false);
+                                                            setEditingAddressId(null);
+                                                            setNewAddress({
+                                                                fullName: '',
+                                                                phoneNumber: '',
+                                                                addressLine: '',
+                                                                city: '',
+                                                                state: '',
+                                                                pincode: '',
+                                                                landmark: ''
+                                                            });
+                                                        }}
                                                         className="px-8 bg-white text-gray-400 border-2 border-gray-100 py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-gray-50 transition-all"
                                                     >
                                                         Cancel
@@ -769,6 +823,25 @@ const Cart = () => {
                                                             <CheckCircle2 className="w-5 h-5" />
                                                         </motion.div>
                                                     )}
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setEditingAddressId(addr.id);
+                                                            setNewAddress({
+                                                                fullName: addr.fullName,
+                                                                phoneNumber: addr.phoneNumber,
+                                                                addressLine: addr.addressLine,
+                                                                city: addr.city,
+                                                                state: addr.state,
+                                                                pincode: addr.pincode,
+                                                                landmark: addr.landmark || ''
+                                                            });
+                                                            setShowAddressForm(true);
+                                                        }}
+                                                        className="absolute top-4 right-4 text-xs font-black text-rose-500 uppercase tracking-widest bg-white/80 px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-500 hover:text-white"
+                                                    >
+                                                        Edit
+                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
@@ -941,9 +1014,59 @@ const Cart = () => {
                                 </section>
                             </div>
 
-                            {/* Right: Payment */}
+                            {/* Right: Payment & Summary */}
                             <div className="space-y-8">
                                 <div className="bg-white rounded-[48px] p-8 shadow-2xl border border-white space-y-8 sticky top-32">
+                                    {/* Order Review Section */}
+                                    <div className="space-y-6">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-xl font-black text-gray-800 tracking-tight uppercase">Review Order</h3>
+                                        </div>
+
+                                        {/* Address Review */}
+                                        <div className="bg-gray-50 rounded-3xl p-5 border border-gray-100 relative group">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Shipping to</p>
+                                            <p className="font-black text-gray-800 text-sm">{selectedAddress?.fullName}</p>
+                                            <p className="text-[11px] font-bold text-gray-500 leading-tight mt-1 line-clamp-2">
+                                                {selectedAddress?.addressLine}, {selectedAddress?.city}
+                                            </p>
+                                            <button
+                                                onClick={() => setStep(2)}
+                                                className="absolute top-4 right-4 text-[10px] font-black text-rose-500 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all"
+                                            >
+                                                Change
+                                            </button>
+                                        </div>
+
+                                        {/* Items Review */}
+                                        <div className="bg-gray-50 rounded-3xl p-5 border border-gray-100 relative group">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Bag Summary ({cart.length} items)</p>
+                                            <div className="flex -space-x-3 overflow-hidden">
+                                                {cart.slice(0, 4).map((item, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={item.displayedImage || item.images?.[0]}
+                                                        className="w-10 h-10 rounded-xl border-2 border-white object-cover shadow-sm"
+                                                        alt="item"
+                                                    />
+                                                ))}
+                                                {cart.length > 4 && (
+                                                    <div className="w-10 h-10 rounded-xl border-2 border-white bg-gray-200 flex items-center justify-center text-[10px] font-black text-gray-500 shadow-sm">
+                                                        +{cart.length - 4}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={() => setStep(1)}
+                                                className="absolute top-4 right-4 text-[10px] font-black text-rose-500 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all"
+                                            >
+                                                Edit Bag
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="h-px bg-gray-100" />
+
                                     <h3 className="text-2xl font-black text-gray-800 tracking-tight uppercase">Payment Method</h3>
                                     <div className="space-y-4">
                                         {[
@@ -1063,17 +1186,52 @@ const Cart = () => {
                                 <h1 className="text-6xl font-black text-gray-800 mb-6 tracking-tighter">SUCCESS! 🎉</h1>
                                 <p className="text-xl font-bold text-gray-400 mb-8 uppercase tracking-widest">Order {purchasedOrder?.id} confirmed</p>
 
-                                {selectedAddress && (
-                                    <div className="bg-blue-50/50 rounded-3xl p-6 mb-16 inline-block text-left border border-blue-100 max-w-md mx-auto">
-                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                            <Truck className="w-4 h-4" /> Shipping TO
-                                        </p>
-                                        <p className="font-black text-gray-800">{selectedAddress.fullName}</p>
-                                        <p className="text-sm font-bold text-gray-600 leading-tight mt-1">
-                                            {selectedAddress.addressLine}, {selectedAddress.landmark ? `${selectedAddress.landmark}, ` : ''}{selectedAddress.city}, {selectedAddress.state} - {selectedAddress.pincode}
-                                        </p>
+                                {purchasedOrder?.address && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
+                                        <div className="bg-blue-50/50 rounded-[40px] p-8 text-left border border-blue-100 relative overflow-hidden group">
+                                            <Truck className="absolute -bottom-6 -right-6 w-32 h-32 text-blue-500/10 -rotate-12 transition-transform group-hover:scale-110 duration-700" />
+                                            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <MapPin className="w-4 h-4" /> Shipping TO
+                                            </p>
+                                            <p className="font-black text-gray-800 text-xl mb-2">{purchasedOrder.address.fullName}</p>
+                                            <p className="text-sm font-bold text-gray-600 leading-relaxed">
+                                                {purchasedOrder.address.addressLine}<br />
+                                                {purchasedOrder.address.landmark ? `${purchasedOrder.address.landmark}, ` : ''}{purchasedOrder.address.city}, {purchasedOrder.address.state} - {purchasedOrder.address.pincode}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-emerald-50/50 rounded-[40px] p-8 text-left border border-emerald-100 relative overflow-hidden group">
+                                            <Package className="absolute -bottom-6 -right-6 w-32 h-32 text-emerald-500/10 -rotate-12 transition-transform group-hover:scale-110 duration-700" />
+                                            <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <TrendingUp className="w-4 h-4" /> ESTIMATED ARRIVAL
+                                            </p>
+                                            <p className="font-black text-gray-800 text-xl mb-2">
+                                                {new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}
+                                            </p>
+                                            <p className="text-sm font-bold text-gray-600 leading-relaxed">
+                                                Items are being prepared. You'll receive a tracking link via SMS within 24 hours.
+                                            </p>
+                                        </div>
                                     </div>
                                 )}
+
+                                {/* Ordered Products Acknowledgement */}
+                                <div className="max-w-4xl mx-auto mb-16">
+                                    <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-8 text-center">Items in this shipment</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {purchasedOrder?.items?.map((item, idx) => (
+                                            <div key={idx} className="bg-white/80 rounded-3xl p-4 border border-gray-100 flex items-center gap-4 shadow-sm">
+                                                <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0">
+                                                    <img src={item.displayedImage || item.images?.[0]} alt={item.name} className="w-full h-full object-cover" />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <p className="font-black text-gray-800 truncate text-sm">{item.name}</p>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Qty: {item.quantity} | Size: {item.size || 'M'}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
                                     <div className="bg-gray-50 rounded-[48px] p-10 border border-gray-100 space-y-8 text-left">

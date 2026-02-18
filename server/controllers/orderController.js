@@ -2,6 +2,8 @@ const Order = require('../models/mysql/Order');
 const OrderItem = require('../models/mysql/OrderItem');
 const GameProfile = require('../models/mongo/GameProfile');
 const Product = require('../models/mongo/Product');
+const User = require('../models/mysql/User');
+const emailService = require('../services/emailService');
 
 // Create New Order
 exports.createOrder = async (req, res) => {
@@ -59,11 +61,19 @@ exports.createOrder = async (req, res) => {
         console.log(`🛍️ Creating order for User ${userId}. Total: ${totalAmount}`);
 
         // 2. Create MySQL Order
+        const addressData = req.body.address;
+        const shippingAddressString = typeof addressData === 'object'
+            ? `${addressData.fullName}, ${addressData.addressLine}, ${addressData.city}, ${addressData.state} - ${addressData.pincode}`
+            : (addressData || 'Standard Shipping Address');
+
+        const shippingEmail = typeof addressData === 'object' ? addressData.email : null;
+
         const newOrder = await Order.create({
             userId,
+            email: shippingEmail,
             totalAmount,
             status: 'processing', // Default to processing after placement
-            shippingAddress: req.body.address || 'Standard Shipping Address', // In a real app, from checkout form
+            shippingAddress: shippingAddressString,
             estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
         });
 
@@ -113,6 +123,9 @@ exports.createOrder = async (req, res) => {
                 // Update total stock
                 product.stock = Math.max(0, product.stock - item.quantity);
 
+                // Increment sales count
+                product.salesCount = (product.salesCount || 0) + item.quantity;
+
                 if (product.gameStats) {
                     totalXpEarned += (product.gameStats.xpReward || 0) * item.quantity;
                 }
@@ -146,7 +159,29 @@ exports.createOrder = async (req, res) => {
             levelUpMessage = `🎉 LEVEL UP! You are now Level ${newLevel}!`;
         }
 
+
         await profile.save();
+
+        // 4. Send Order Confirmation Email
+        try {
+            const user = await User.findByPk(userId);
+            if (user && user.email) {
+                // Fetch newly created items for the email
+                const orderWithItems = await Order.findByPk(newOrder.id, {
+                    include: [{ model: OrderItem, as: 'OrderItems' }]
+                });
+
+                await emailService.sendOrderConfirmation(
+                    newOrder.email || user.email,
+                    newOrder,
+                    orderWithItems.OrderItems
+                );
+                console.log(`📧 Order confirmation email sent to ${newOrder.email || user.email}`);
+            }
+        } catch (emailErr) {
+            console.error('❌ Failed to send order confirmation email:', emailErr);
+            // Don't fail the request if email fails
+        }
 
         res.status(201).json({
             message: 'Order placed successfully',

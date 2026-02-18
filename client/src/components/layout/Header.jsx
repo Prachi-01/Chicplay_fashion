@@ -333,17 +333,27 @@ const Header = () => {
                                 <Link to="/dresses" className="mobile-menu-item" onClick={() => setIsMobileMenuOpen(false)}>
                                     Dresses
                                 </Link>
+                                <Link to="/orders" className="mobile-menu-item" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <ShoppingBag size={18} /> My Orders
+                                </Link>
                                 <Link to="/game-zone" className="mobile-menu-item" onClick={() => setIsMobileMenuOpen(false)}>
-                                    Game Zone
+                                    <Trophy size={18} /> My Rewards
                                 </Link>
                                 <Link to="/dressing-room" className="mobile-menu-item" onClick={() => setIsMobileMenuOpen(false)}>
-                                    Dressing Room
+                                    <Sparkles size={18} /> Dressing Room
                                 </Link>
 
                                 {(!user || user.role === 'customer') && (
                                     <Link to="/vendor/register" className="mobile-menu-item vendor-item" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Sparkles size={16} />
                                         Sell on ChicPlay
+                                    </Link>
+                                )}
+
+                                {user?.role === 'vendor' && (
+                                    <Link to="/vendor/dashboard" className="mobile-menu-item vendor-item" onClick={() => setIsMobileMenuOpen(false)}>
+                                        <Sparkles size={16} />
+                                        Vendor Dashboard
                                     </Link>
                                 )}
 

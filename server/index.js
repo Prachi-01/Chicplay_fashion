@@ -51,6 +51,8 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/colors', colorRoutes);
 app.use('/api/vendors', require('./routes/vendorRoutes'));
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/webhooks', require('./routes/webhookRoutes'));
 
 // Basic Test Route
 app.get('/', (req, res) => {

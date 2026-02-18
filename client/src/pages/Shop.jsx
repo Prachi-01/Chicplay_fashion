@@ -150,12 +150,15 @@ const Shop = () => {
             const isPublished = user?.role === 'admin' || p.isPublished !== false;
 
             const urlFilter = searchParams.get('filter');
-            const isNewArrival = urlFilter === 'newArrival' ? (p.badge?.type === 'newArrival' || p.badge?.type === 'justIn') : true;
+            const matchesFilter = !urlFilter ||
+                (urlFilter === 'newArrival' && (p.badge?.type === 'newArrival' || p.badge?.type === 'justIn')) ||
+                (urlFilter === 'bestSellers' && p.salesCount > 0) ||
+                (urlFilter === 'sale' && p.salePrice && p.salePrice < p.price);
 
             const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 p.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-            const passes = matchesCategory && isNewArrival && !p.isExclusive && isVisible && isPublished && isApproved && matchesSearch;
+            const passes = matchesCategory && matchesFilter && !p.isExclusive && isVisible && isPublished && isApproved && matchesSearch;
 
             if (!passes) {
                 console.log(`❌ Filtered out: ${p.name}`, {
@@ -172,6 +175,17 @@ const Shop = () => {
         });
 
         console.log('✅ Filtered products count:', filtered.length);
+
+        // Sort by newest first if 'newArrival' filter is active
+        if (searchParams.get('filter') === 'newArrival') {
+            return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+
+        // Sort by sales count if 'bestSellers' filter is active
+        if (searchParams.get('filter') === 'bestSellers') {
+            return filtered.sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0));
+        }
+
         return filtered;
     }, [products, activeCategory, user, searchQuery, searchParams]);
 
@@ -307,7 +321,13 @@ const Shop = () => {
                     <div className="flex-1" ref={gridRef}>
                         <div className="mb-6 flex justify-between items-center">
                             <h2 className="text-2xl font-bold text-mocha">
-                                {activeCategory === "All" ? "Trending Now" : activeCategory}
+                                {searchParams.get('filter') === 'newArrival'
+                                    ? "New Arrivals"
+                                    : searchParams.get('filter') === 'bestSellers'
+                                        ? "Best Sellers"
+                                        : searchParams.get('filter') === 'sale'
+                                            ? "Exclusive Sale"
+                                            : (activeCategory === "All" ? "Trending Now" : activeCategory)}
                             </h2>
                             <div className="text-sm text-gray-400 font-medium">
                                 Showing {filteredProducts.length} items
@@ -335,7 +355,12 @@ const Shop = () => {
 
                                         {/* Dynamic Product Badges */}
                                         <div className="product-badge-container">
-                                            <ProductBadge badge={product.badge} />
+                                            <ProductBadge
+                                                badge={searchParams.get('filter') === 'bestSellers'
+                                                    ? { type: 'bestSeller', label: 'Best Seller', color: '#F59E0B', icon: 'star' }
+                                                    : product.badge
+                                                }
+                                            />
                                             {!product.badge && product.gameStats.rarity && (
                                                 <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-mocha shadow-sm border border-blush/20 flex items-center gap-1">
                                                     ✨ {product.gameStats.rarity}

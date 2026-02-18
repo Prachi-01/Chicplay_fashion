@@ -25,8 +25,16 @@ import VendorStatus from './pages/VendorStatus';
 import VendorRoute from './components/auth/VendorRoute';
 import ProductDetail from './pages/ProductDetail';
 import Orders from './pages/Orders';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import SizeGuide from './pages/SizeGuide';
+import StyleQuiz from './pages/StyleQuiz';
+import ArchetypesPage from './pages/ArchetypesPage';
+import TrendsPage from './pages/TrendsPage';
+import BlogPage from './pages/BlogPage';
 
-import { MobileBottomNav, Breadcrumbs } from './components/navigation';
+import { MobileBottomNav, Breadcrumbs, ScrollToTop } from './components/navigation';
+import TozyChatbot from './components/chatbot/TozyChatbot';
 import './components/navigation/Navigation.css';
 import './App.css'
 
@@ -49,6 +57,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       {!isDashboard && <Header />}
       {!isDashboard && <Breadcrumbs />}
@@ -61,6 +70,13 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/dresses" element={<Dresses />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/size-guide" element={<SizeGuide />} />
+          <Route path="/quiz" element={<StyleQuiz />} />
+          <Route path="/archetypes" element={<ArchetypesPage />} />
+          <Route path="/trends" element={<TrendsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
 
           {/* Protected Routes */}
           <Route path="/cart" element={
@@ -130,6 +146,7 @@ function App() {
 
       {/* Mobile Bottom Navigation - Always visible on mobile EXCEPT dashboards */}
       {!isDashboard && <MobileBottomNav />}
+      <TozyChatbot />
     </div>
   )
 }

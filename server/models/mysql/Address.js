@@ -20,6 +20,13 @@ const Address = sequelize.define('Address', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            isEmail: true
+        }
+    },
     phoneNumber: {
         type: DataTypes.STRING,
         allowNull: false

@@ -1,5 +1,6 @@
 const Product = require('../models/mongo/Product');
 const Color = require('../models/mongo/Color');
+const googleSheetsService = require('../services/googleSheetsService');
 
 // Helper to sync colors used in products to the central database
 const syncColorsToCentralDb = async (colorVariations) => {
@@ -263,6 +264,13 @@ exports.createProduct = async (req, res) => {
         await newProduct.save();
         console.log('✅ Product saved successfully to MongoDB');
 
+        // Sync to Google Sheets if approved (Admin products are auto-approved)
+        if (newProduct.status === 'approved') {
+            googleSheetsService.appendProductRow(newProduct).catch(err => {
+                console.error('⚠️ Google Sheets Sync failed on create:', err.message);
+            });
+        }
+
         // Sync colors to central database
         if (parsedColorVariations && parsedColorVariations.length > 0) {
             console.log('🎨 Syncing colors...');
@@ -296,6 +304,15 @@ exports.deleteBulkProducts = async (req, res) => {
             deletedCount: result.deletedCount,
             ids: ids
         });
+
+        // Sync deletions to Google Sheets (Bulk)
+        if (ids && ids.length > 0) {
+            ids.forEach(id => {
+                googleSheetsService.deleteProductRow(id).catch(err => {
+                    console.error(`⚠️ Google Sheets Delete failed for ${id}:`, err.message);
+                });
+            });
+        }
     } catch (error) {
         console.error('Error in bulk deleting products:', error);
         res.status(500).json({ message: 'Server Error deleting products' });
@@ -314,6 +331,11 @@ exports.deleteProduct = async (req, res) => {
         await Product.findByIdAndDelete(req.params.id);
 
         res.json({ message: 'Product deleted successfully', productId: req.params.id });
+
+        // Sync deletion to Google Sheets
+        googleSheetsService.deleteProductRow(req.params.id).catch(err => {
+            console.error('⚠️ Google Sheets Sync failed on delete:', err.message);
+        });
     } catch (error) {
         console.error('Error deleting product:', error);
         res.status(500).json({ message: 'Server Error deleting product' });
@@ -412,6 +434,13 @@ exports.updateProduct = async (req, res) => {
 
         await product.save();
         res.json(product);
+
+        // Sync to Google Sheets if approved
+        if (product.status === 'approved') {
+            googleSheetsService.updateProductRow(product).catch(err => {
+                console.error('⚠️ Google Sheets Sync failed on update:', err.message);
+            });
+        }
     } catch (error) {
         console.error('Error updating product:', error);
         res.status(500).json({ message: 'Server Error updating product' });
@@ -506,6 +535,16 @@ exports.approveProduct = async (req, res) => {
             message: `Product ${status}`,
             product
         });
+
+        // Sync to Google Sheets upon approval
+        if (status === 'approved') {
+            googleSheetsService.updateProductRow(product).catch(err => {
+                console.error('⚠️ Google Sheets Sync failed on approval:', err.message);
+            });
+        } else if (status === 'rejected') {
+            // Optional: remove from sheet if it was previously approved
+            googleSheetsService.deleteProductRow(product._id).catch(() => { });
+        }
     } catch (error) {
         console.error('Error approving product:', error);
         res.status(500).json({ message: 'Server Error' });

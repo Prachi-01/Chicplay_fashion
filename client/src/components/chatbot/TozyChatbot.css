@@ -1,0 +1,318 @@
+.tozy-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: 'Outfit', sans-serif;
+}
+
+@media (max-width: 768px) {
+    .tozy-container {
+        bottom: 94px;
+        /* 70px (nav) + 24px (offset) */
+    }
+}
+
+.tozy-fab {
+    width: 64px;
+    height: 64px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #ff4d6d, #ff85a1);
+    color: white;
+    border: none;
+    box-shadow: 0 12px 24px rgba(255, 77, 109, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.tozy-fab:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 16px 32px rgba(255, 77, 109, 0.4);
+}
+
+.tozy-fab-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: inherit;
+    animation: tozy-pulse 2s infinite;
+}
+
+@keyframes tozy-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.tozy-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    height: 600px;
+    max-height: calc(100vh - 120px);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px border rgba(255, 255, 255, 0.4);
+    border-radius: 40px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+}
+
+.tozy-header {
+    background: linear-gradient(135deg, #1a1a1a, #333333);
+    padding: 24px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tozy-header-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tozy-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #ff4d6d, #ff85a1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 8px 16px rgba(255, 77, 109, 0.2);
+}
+
+.tozy-header-info h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+.tozy-header-info p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tozy-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.tozy-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.tozy-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+}
+
+.tozy-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tozy-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.message.tozy {
+    align-self: flex-start;
+    background: white;
+    color: #1a1a1a;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.message.user {
+    align-self: flex-end;
+    background: #ff4d6d;
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 8px 16px rgba(255, 77, 109, 0.2);
+}
+
+.tozy-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.action-btn {
+    background: white;
+    border: 1.5px solid #f0f0f0;
+    padding: 8px 14px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.action-btn:hover {
+    border-color: #ff4d6d;
+    color: #ff4d6d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 77, 109, 0.1);
+}
+
+.tozy-input-area {
+    padding: 20px 24px 32px;
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tozy-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f8f8;
+    padding: 8px 8px 8px 20px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.tozy-input-wrapper:focus-within {
+    background: white;
+    border-color: #ff4d6d;
+    box-shadow: 0 8px 24px rgba(255, 77, 109, 0.1);
+}
+
+.tozy-input-wrapper input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 8px 0;
+}
+
+.tozy-send-btn {
+    width: 40px;
+    height: 40px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tozy-send-btn:hover {
+    background: #ff4d6d;
+    transform: scale(1.05);
+}
+
+.tozy-send-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Product Card in Chat */
+.chat-product-card {
+    background: white;
+    border-radius: 24px;
+    padding: 12px;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    max-width: 100%;
+}
+
+.chat-product-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.chat-product-info h5 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.chat-product-info p {
+    margin: 4px 0;
+    font-size: 12px;
+    font-weight: 900;
+    color: #ff4d6d;
+}
+
+.chat-product-link {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+@media (max-width: 480px) {
+    .tozy-window {
+        width: calc(100vw - 48px);
+        height: min(600px, calc(100vh - 140px));
+    }
+}

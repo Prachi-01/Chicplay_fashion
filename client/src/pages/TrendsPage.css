@@ -1,0 +1,31 @@
+.trends-page {
+    background-color: #fdfaf7;
+}
+
+.trends-hero {
+    background-color: #1a1a1a;
+}
+
+.trend-card {
+    transition: transform 0.3s ease;
+}
+
+.trend-image-container {
+    background-color: #000;
+}
+
+.trend-rank {
+    font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 1024px) {
+    .trends-hero h1 {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .trends-hero h1 {
+        font-size: 3rem;
+    }
+}
